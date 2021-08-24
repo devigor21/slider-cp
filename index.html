@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Slider</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <style>
+    #coloredSlider {
+      float: left;
+      clear: left;
+      width: 300px;
+      margin: 15px;
+    }
+
+    #textField {
+      width: 100px;
+      margin: 12px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    function getTheColor(colorVal) {
+      let myRed = 0;
+      let myGreen = 0;
+      let myBlue = 0;
+
+      if (colorVal < 50) {
+        myRed = parseInt(((50 - colorVal) * 4) * 255 / 200);
+        myGreen = parseInt(((50 - colorVal) * 4) * 255 / 200);
+        myBlue = parseInt(((50 - colorVal) * 4) * 255 / 200);
+      }
+
+      else if (colorVal >= 50 && colorVal < 100) {
+        myRed = 255;
+        myGreen = parseInt(((100 - colorVal) * 4) * 255 / 200);
+        myBlue = parseInt(((100 - colorVal) * 4) * 255 / 200);
+      }
+
+      else if (colorVal >= 100 && colorVal < 150) {
+        myRed = parseInt(((150 - colorVal) * 4) * 255 / 200);
+        myGreen = 255;
+        myBlue = parseInt(((150 - colorVal) * 4) * 255 / 200);
+      }
+
+      else if (colorVal >= 150) {
+        myRed = parseInt(((200 - colorVal) * 4) * 255 / 200);
+        myGreen = parseInt(((200 - colorVal) * 4) * 255 / 200);
+        myBlue = 255;
+      }
+
+      return ("rgb(" + myRed + "," + myGreen + "," + myBlue + ")");
+    }
+
+    function refreshSwatch() {
+      const coloredSlider = $("#coloredSlider").slider("value"),
+        myColor = getTheColor(coloredSlider);
+
+      if ($("#rad-1").hasClass("ui-checkboxradio-checked ui-state-active")) {
+        $("#textField").css("color", myColor);
+      }
+      if ($("#rad-2").hasClass("ui-checkboxradio-checked ui-state-active")) {
+        $("#textField").css("background-color", myColor);
+      }
+    }
+
+    $(function () {
+      $("#coloredSlider").slider({
+        orientation: "horizontal",
+        range: "min",
+        max: 200,
+        value: 0,
+        slide: refreshSwatch,
+        change: refreshSwatch
+      });
+
+      $("input").checkboxradio({
+        icon: false
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <fieldset>
+    <legend>Select: </legend>
+    <label class="ui-checkboxradio-checked ui-state-active" for="radio-1" id="rad-1">color</label>
+    <input type="radio" name="radio-1" id="radio-1">
+    <label for="radio-2" id="rad-2">backgroundColor</label>
+    <input type="radio" name="radio-1" id="radio-2">
+  </fieldset>
+
+  <div id="coloredSlider"></div>
+
+  <input type="text" id="textField">
+</body>
+
+</html>
